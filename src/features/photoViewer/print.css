@@ -1,0 +1,27 @@
+@media print {
+    @page {
+        size: landscape;
+        margin: 1cm; /* Adjust margins as needed */
+    }
+    body * {
+        visibility: visible;
+    }
+    .print-container, .print-container * {
+        visibility: visible;
+    }
+    .print-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%; background: aqua; padding: 20px;
+    }
+    .ag-theme-alpine {
+        width: 100% !important;
+    }
+    .ag-row {
+        page-break-before: always;
+    }
+    .ag-row-group, .ag-row-odd, .ag-row-even {
+        page-break-inside: avoid;
+    }
+}

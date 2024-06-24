@@ -1,0 +1,127 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "react-app",
+        "react-app/jest",
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended"
+    ],
+    "overrides": [
+        {
+            "files": ["src/100Algoritms/**"],
+            "excludedFiles": ["*.js"]
+        }
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "prettier",
+        "@typescript-eslint",
+        "react-hooks",
+        "sort-imports-es6-autofix",
+        "unused-imports",
+        "sort-exports",
+        "import",
+        "sort-class-members"
+    ],
+    "ignorePatterns": ["temp.js", "*.svg", "*.css", "*.test.*", "node_modules", "build"],
+    "rules": {
+        "@typescript-eslint/comma-dangle": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unused-vars": ["warn"],
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "react/jsx-no-target-blank": "off",
+        "comma-dangle": "off",
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-uses-react": "off",
+        "react/sort-default-props": [
+            2,
+            {
+                "ignoreCase": true
+            }
+        ],
+        "react/jsx-sort-props": [
+            2,
+            {
+                "ignoreCase": true
+            }
+        ],
+        "import/no-named-as-default": 0,
+        "linebreak-style": ["error", "unix"],
+        //        "quotes": ["error", "double"],
+        "semi": ["error", "never"],
+        "semi-style": ["error", "last"],
+        "no-mixed-spaces-and-tabs": 0,
+        "no-multiple-empty-lines": [
+            "error",
+            {
+                "max": 1,
+                "maxEOF": 0,
+                "maxBOF": 0
+            }
+        ],
+        "max-len": [
+            "error",
+            {
+                "code": 120
+            }
+        ],
+        "object-curly-spacing": ["error", "always"],
+
+        "sort-imports-es6-autofix/sort-imports-es6": [
+            2,
+            {
+                "ignoreCase": false,
+                "ignoreMemberSort": false,
+                "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+            }
+        ],
+        "sort-exports/sort-exports": [
+            "error",
+            {
+                "sortDir": "asc",
+                "ignoreCase": true,
+                "sortExportKindFirst": "type"
+            }
+        ],
+
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error",
+        "no-unused-vars": "off",
+        //   "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "^_",
+                "args": "after-used",
+                "argsIgnorePattern": "^_"
+            }
+        ],
+        "prefer-const": "off",
+        //        "unused-imports/no-unused-imports": "warn",
+        "@typescript-eslint/member-ordering": "error",
+        "sort-class-members/sort-class-members": [
+            2,
+            {
+                "order": [
+                    "[properties]",
+                    "[conventional-private-properties]",
+                    "constructor",
+                    "[conventional-private-methods]",
+                    "[static-properties]",
+                    "[static-methods]"
+                ],
+                "accessorPairPositioning": "getThenSet"
+            }
+        ]
+    }
+}
