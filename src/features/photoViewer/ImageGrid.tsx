@@ -3,7 +3,10 @@ import "ag-grid-community/styles/ag-grid.css"
 import "ag-grid-community/styles/ag-theme-alpine.css"
 import { AgGridReact } from "ag-grid-react"
 import { ColDef, GridApi } from "ag-grid-community"
-import FileUploader from "./FileUploader" // Import the print styles
+import { addImages } from "../photoViewerSlice" // Import the print styles
+import { selectAllImages } from "./imagesReselect"
+import { useDispatch, useSelector } from "react-redux"
+import FileUploader from "./FileUploader"
 import ImageRenderer from "./ImageRenderer"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
@@ -12,6 +15,8 @@ const ImageGrid: React.FC = () => {
     const [gridApi, setGridApi] = useState<GridApi | null>(null)
     const gridRef = useRef<AgGridReact>(null)
     const containerStyle = useMemo(() => ({ width: "1000px", height: "100%" }), [])
+    const dispatch = useDispatch()
+    const allImages = useSelector(selectAllImages)
 
     const defaultColDef = useMemo<ColDef>(() => {
         return {
@@ -50,7 +55,7 @@ const ImageGrid: React.FC = () => {
         }
     ]
 
-    const rowData = imageUrls.reduce((rows, url, index) => {
+    const rowData = allImages.reduce((rows, url, index) => {
         const rowIndex = Math.floor(index / 4)
         if (!rows[rowIndex]) rows[rowIndex] = {}
         rows[rowIndex][`image${(index % 4) + 1}`] = url
@@ -60,6 +65,9 @@ const ImageGrid: React.FC = () => {
     const handleFilesSelected = (files: FileList | null) => {
         if (files) {
             const urls = Array.from(files).map((file) => URL.createObjectURL(file))
+
+            dispatch(addImages(urls))
+
             setImageUrls(urls)
         }
     }
