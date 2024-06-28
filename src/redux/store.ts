@@ -1,36 +1,42 @@
-import { combineSlices, configureStore } from "@reduxjs/toolkit"
+import {
+    Action,
+    ListenerEffectAPI,
+    ThunkAction,
+    TypedAddListener,
+    TypedStartListening,
+    configureStore,
+    createListenerMiddleware
+} from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
-import type { Action, ThunkAction } from "@reduxjs/toolkit"
+import photoViewerSlice from "../features/photoViewerSlice"
 
-// `combineSlices` automatically combines the reducers using
-// their `reducerPath`s, therefore we no longer need to call `combineReducers`.
-const rootReducer = combineSlices()
+export type AppAddListener = TypedAddListener<RootState, AppDispatch>
 
-export type AppDispatch = AppStore["dispatch"]
+const listenerMiddlewareInstance = createListenerMiddleware({
+    onError: () => console.error
+})
 
-// The store setup is wrapped in `makeStore` to allow reuse
-// when setting up tests that need the same store config
-export type AppStore = typeof store
+export type AppDispatch = typeof store.dispatch
 
-// Infer the type of `store`
-export type AppThunk<ThunkReturnType = void> = ThunkAction<ThunkReturnType, RootState, unknown, Action>
+export type AppListenerEffectAPI = ListenerEffectAPI<RootState, AppDispatch>
+export type AppStartListening = TypedStartListening<RootState, AppDispatch>
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>
 
-// Infer the `RootState` type from the root reducer
-export type RootState = ReturnType<typeof rootReducer>
-// Infer the `AppDispatch` type from the store itself
-export const makeStore = (preloadedState?: Partial<RootState>) => {
-    const store = configureStore({
-        reducer: rootReducer,
-        // Adding the api middleware enables caching, invalidation, polling,
-        // and other useful features of `rtk-query`.
-        middleware: (getDefaultMiddleware) => {
-            return getDefaultMiddleware()
-        },
-        preloadedState
-    })
-    // configure listeners using the provided defaults
-    // optional, but required for `refetchOnFocus`/`refetchOnReconnect` behaviors
-    setupListeners(store.dispatch)
-    return store
-}
-export const store = makeStore()
+export type RootState = ReturnType<typeof store.getState>
+
+export const startAppListening = listenerMiddlewareInstance.startListening as AppStartListening
+export const store = configureStore({
+    reducer: {
+        photoViewerSlice
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            thunk: {
+                extraArgument: null
+            },
+            serializableCheck: false
+        }).prepend(listenerMiddlewareInstance.middleware)
+})
+
+setupListeners(store.dispatch)
+export default store
